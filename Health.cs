@@ -2,18 +2,14 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    // Delegate to handle death event
-    public delegate void DeathEvent();
-    public static event DeathEvent OnDeath;
+    public delegate void HealthChangeEvent(int currentHealth, int maxHealth); // Delegate to handle health change event
+    public static event HealthChangeEvent OnHealthChange; // Event triggered when health changes
 
     [SerializeField] private int maxHealth = 100; // Maximum health value for the object
     private int currentHealth; // Current health value for the object
 
-    // Public property for accessing the current health value
-    public int CurrentHealth => currentHealth;
-
-    // Public property for accessing the maximum health value
-    public int MaxHealth => maxHealth;
+    public int CurrentHealth => currentHealth; // Public property for accessing the current health value
+    public int MaxHealth => maxHealth; // Public property for accessing the maximum health value
 
     private void Start()
     {
@@ -37,8 +33,11 @@ public class Health : MonoBehaviour
         // Check if health has dropped below 0 (dead)
         if (currentHealth <= 0)
         {
+            currentHealth = 0;
             Die(); // Call the Die function if the object's health is less than or equal to 0
         }
+
+        OnHealthChange?.Invoke(currentHealth, maxHealth); // Trigger health change event
     }
 
     /// <summary>
@@ -57,11 +56,13 @@ public class Health : MonoBehaviour
 
         // Make sure currentHealth doesn't exceed maxHealth
         currentHealth = Mathf.Min(currentHealth, maxHealth);
+
+        OnHealthChange?.Invoke(currentHealth, maxHealth); // Trigger health change event
     }
 
     private void Die()
     {
         Debug.Log(gameObject.name + " has died!");
-        OnDeath?.Invoke();
+        OnHealthChange?.Invoke(currentHealth, maxHealth); // Trigger health change event
     }
 }
