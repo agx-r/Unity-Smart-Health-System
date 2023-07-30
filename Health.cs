@@ -13,7 +13,7 @@ public class Health : MonoBehaviour
     [Tooltip("The percentage of health with which an object is created.")]
     [Range(0f, 100f)]
     private float startHealthPercent = 100;
-    
+
     [SerializeField]
     [Tooltip("Multiplier applied to damage taken.")]
     private float damageMultiplier = 1;
@@ -21,7 +21,7 @@ public class Health : MonoBehaviour
     [SerializeField]
     [Tooltip("Multiplier applied to healing received.")]
     private float healMultiplier = 1;
-    
+
     private int currentHealth; // Current health value for the object
 
     public int CurrentHealth => currentHealth; // Public property for accessing the current health value
@@ -29,7 +29,7 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
-        currentHealth = maxHealth * (startHealthPercent/100);
+        currentHealth = Mathf.RoundToInt(maxHealth * (startHealthPercent / 100f));
     }
 
     /// <summary>
@@ -79,6 +79,47 @@ public class Health : MonoBehaviour
     private void Die()
     {
         Debug.Log(gameObject.name + " has died!");
+        OnHealthChange?.Invoke(currentHealth, maxHealth); // Trigger health change event
+    }
+    
+    /// <summary>
+    /// Function to apply regeneration over time to the object's health.
+    /// </summary>
+    /// <param name="regenAmount">The amount of regeneration to apply.</param>
+    /// <param name="regenDuration">The duration of the regeneration process.</param>
+    public void ApplyRegeneration(int regenAmount, float regenDuration)
+    {
+        StartCoroutine(RegenerationCoroutine(regenAmount, regenDuration));
+    }
+
+    private IEnumerator RegenerationCoroutine(int regenAmount, float regenDuration)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < regenDuration)
+        {
+            // Calculate the amount of health to regenerate during this frame
+            int healthToRegen = Mathf.RoundToInt(regenAmount * healMultiplier * Time.deltaTime);
+
+            // Increase current health by the health to regenerate
+            currentHealth = Mathf.Min(currentHealth + healthToRegen, maxHealth);
+
+            OnHealthChange?.Invoke(currentHealth, maxHealth); // Trigger health change event
+
+            elapsedTime += Time.deltaTime;
+            yield return null; // Wait for the next frame
+        }
+    }
+
+    /// <summary>
+    /// Function to consume a potion and apply instant healing.
+    /// </summary>
+    /// <param name="potionHealAmount">The amount of healing the potion provides.</param>
+    public void ConsumePotion(int potionHealAmount)
+    {
+        int totalHealAmount = Mathf.RoundToInt(potionHealAmount * healMultiplier);
+        currentHealth = Mathf.Min(currentHealth + totalHealAmount, maxHealth);
+
         OnHealthChange?.Invoke(currentHealth, maxHealth); // Trigger health change event
     }
 }
