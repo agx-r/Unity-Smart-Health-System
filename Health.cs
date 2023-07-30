@@ -20,10 +20,13 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth; // Initialize current health to maxHealth when the object starts
     }
 
-    // Function to take damage
+    /// <summary>
+    /// Function to apply damage to the object's health.
+    /// </summary>
+    /// <param name="damageAmount">The amount of damage to apply.</param>
     public void TakeDamage(int damageAmount)
     {
-        if (damageAmount < 0)
+        if (damageAmount <= 0)
         {
             Debug.LogWarning("Damage amount should be a positive value. Use Heal method to heal.");
             return;
@@ -38,10 +41,13 @@ public class Health : MonoBehaviour
         }
     }
 
-    // Function to heal
+    /// <summary>
+    /// Function to apply healing to the object's health.
+    /// </summary>
+    /// <param name="healAmount">The amount of healing to apply.</param>
     public void Heal(int healAmount)
     {
-        if (healAmount < 0)
+        if (healAmount <= 0)
         {
             Debug.LogWarning("Heal amount should be a positive value. Use TakeDamage method to take damage.");
             return;
@@ -55,12 +61,7 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        // Handle death event (e.g., respawn, game over, etc.)
         Debug.Log(gameObject.name + " has died!");
-
-        // Call functions from other scripts subscribed to the OnDeath event
         OnDeath?.Invoke();
-
-        // Implement your custom death behavior here (e.g., respawn, game over logic).
     }
 }
