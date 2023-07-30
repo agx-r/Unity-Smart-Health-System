@@ -5,9 +5,17 @@ public class Health : MonoBehaviour
     public delegate void HealthChangeEvent(int currentHealth, int maxHealth); // Delegate to handle health change event
     public static event HealthChangeEvent OnHealthChange; // Event triggered when health changes
 
-    [SerializeField] private int maxHealth = 100; // Maximum health value for the object
-    [SerializeField] private float damageMultiplier = 1;
-    [SerializeField] private float healMultiplier = 1;
+    [SerializeField]
+    [Tooltip("The maximum health value for the object.")]
+    private int maxHealth = 100;
+
+    [SerializeField]
+    [Tooltip("Multiplier applied to damage taken.")]
+    private float damageMultiplier = 1;
+
+    [SerializeField]
+    [Tooltip("Multiplier applied to healing received.")]
+    private float healMultiplier = 1;
     
     private int currentHealth; // Current health value for the object
 
