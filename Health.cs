@@ -6,6 +6,9 @@ public class Health : MonoBehaviour
     public static event HealthChangeEvent OnHealthChange; // Event triggered when health changes
 
     [SerializeField] private int maxHealth = 100; // Maximum health value for the object
+    [SerializeField] private float damageMultiplier = 1;
+    [SerializeField] private float healMultiplier = 1;
+    
     private int currentHealth; // Current health value for the object
 
     public int CurrentHealth => currentHealth; // Public property for accessing the current health value
@@ -28,7 +31,7 @@ public class Health : MonoBehaviour
             return;
         }
 
-        currentHealth -= damageAmount; // Reduce current health by the damage amount
+        currentHealth -= damageAmount * damageMultiplier; // Reduce current health by the damage amount
 
         // Check if health has dropped below 0 (dead)
         if (currentHealth <= 0)
@@ -52,7 +55,7 @@ public class Health : MonoBehaviour
             return;
         }
 
-        currentHealth += healAmount; // Increase current health by the heal amount
+        currentHealth += healAmount * healMultiplier; // Increase current health by the heal amount
 
         // Make sure currentHealth doesn't exceed maxHealth
         currentHealth = Mathf.Min(currentHealth, maxHealth);
