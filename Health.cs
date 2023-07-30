@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    public delegate void DeathEvent();
+    public static event DeathEvent OnDeath;
+
     public int maxHealth = 100;
     private int currentHealth;
 
@@ -35,6 +38,13 @@ public class Health : MonoBehaviour
     {
         // Handle death event (e.g., respawn, game over, etc.)
         Debug.Log(gameObject.name + " has died!");
+
+        // Call functions from other scripts subscribed to the OnDeath event
+        if (OnDeath != null)
+        {
+            OnDeath();
+        }
+
         // Implement your custom death behavior here.
     }
 }
