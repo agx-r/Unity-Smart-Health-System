@@ -10,6 +10,11 @@ public class Health : MonoBehaviour
     private int maxHealth = 100;
 
     [SerializeField]
+    [Tooltip("The percentage of health with which an object is created.")]
+    [Range(0f, 100f)]
+    private float startHealthPercent = 100;
+    
+    [SerializeField]
     [Tooltip("Multiplier applied to damage taken.")]
     private float damageMultiplier = 1;
 
@@ -24,7 +29,7 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
-        currentHealth = maxHealth; // Initialize current health to maxHealth when the object starts
+        currentHealth = maxHealth * (startHealthPercent/100);
     }
 
     /// <summary>
