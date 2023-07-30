@@ -2,33 +2,34 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    // Delegate to handle death event
     public delegate void DeathEvent();
     public static event DeathEvent OnDeath;
 
-    public int maxHealth = 100;
-    private int currentHealth;
+    [SerializeField] private int maxHealth = 100; // Maximum health value for the object
+    private int currentHealth; // Current health value for the object
 
     private void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = maxHealth; // Initialize current health to maxHealth when the object starts
     }
 
     // Function to take damage
     public void TakeDamage(int damageAmount)
     {
-        currentHealth -= damageAmount;
+        currentHealth -= damageAmount; // Reduce current health by the damage amount
 
         // Check if health has dropped below 0 (dead)
         if (currentHealth <= 0)
         {
-            Die();
+            Die(); // Call the Die function if the object's health is less than or equal to 0
         }
     }
 
     // Function to heal
     public void Heal(int healAmount)
     {
-        currentHealth += healAmount;
+        currentHealth += healAmount; // Increase current health by the heal amount
 
         // Make sure currentHealth doesn't exceed maxHealth
         currentHealth = Mathf.Min(currentHealth, maxHealth);
