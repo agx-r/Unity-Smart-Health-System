@@ -40,11 +40,8 @@ public class Health : MonoBehaviour
         Debug.Log(gameObject.name + " has died!");
 
         // Call functions from other scripts subscribed to the OnDeath event
-        if (OnDeath != null)
-        {
-            OnDeath();
-        }
+        OnDeath?.Invoke();
 
-        // Implement your custom death behavior here.
+        // Implement your custom death behavior here (e.g., respawn, game over logic).
     }
 }
