@@ -1,13 +1,14 @@
 using UnityEngine;
+using System.Collections;
 
 public class Health : MonoBehaviour
 {
-    public delegate void HealthChangeEvent(int currentHealth, int maxHealth); // Delegate to handle health change event
+    public delegate void HealthChangeEvent(float currentHealth, float maxHealth); // Delegate to handle health change event
     public static event HealthChangeEvent OnHealthChange; // Event triggered when health changes
 
     [SerializeField]
     [Tooltip("The maximum health value for the object.")]
-    private int maxHealth = 100;
+    private float maxHealth = 100;
 
     [SerializeField]
     [Tooltip("The percentage of health with which an object is created.")]
@@ -22,10 +23,10 @@ public class Health : MonoBehaviour
     [Tooltip("Multiplier applied to healing received.")]
     private float healMultiplier = 1;
 
-    private int currentHealth; // Current health value for the object
+    private float currentHealth; // Current health value for the object
 
-    public int CurrentHealth => currentHealth; // Public property for accessing the current health value
-    public int MaxHealth => maxHealth; // Public property for accessing the maximum health value
+    public float CurrentHealth => currentHealth; // Public property for accessing the current health value
+    public float MaxHealth => maxHealth; // Public property for accessing the maximum health value
 
     private void Start()
     {
@@ -36,7 +37,7 @@ public class Health : MonoBehaviour
     /// Function to apply damage to the object's health.
     /// </summary>
     /// <param name="damageAmount">The amount of damage to apply.</param>
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(float damageAmount)
     {
         if (damageAmount <= 0)
         {
@@ -60,7 +61,7 @@ public class Health : MonoBehaviour
     /// Function to apply healing to the object's health.
     /// </summary>
     /// <param name="healAmount">The amount of healing to apply.</param>
-    public void Heal(int healAmount)
+    public void Heal(float healAmount)
     {
         if (healAmount <= 0)
         {
@@ -87,19 +88,19 @@ public class Health : MonoBehaviour
     /// </summary>
     /// <param name="regenAmount">The amount of regeneration to apply.</param>
     /// <param name="regenDuration">The duration of the regeneration process.</param>
-    public void ApplyRegeneration(int regenAmount, float regenDuration)
+    public void ApplyRegeneration(float regenAmount, float regenDuration)
     {
         StartCoroutine(RegenerationCoroutine(regenAmount, regenDuration));
     }
 
-    private IEnumerator RegenerationCoroutine(int regenAmount, float regenDuration)
+    private IEnumerator RegenerationCoroutine(float regenAmount, float regenDuration)
     {
         float elapsedTime = 0f;
 
         while (elapsedTime < regenDuration)
         {
             // Calculate the amount of health to regenerate during this frame
-            int healthToRegen = Mathf.RoundToInt(regenAmount * healMultiplier * Time.deltaTime);
+            float healthToRegen = Mathf.RoundToInt(regenAmount * healMultiplier * Time.deltaTime);
 
             // Increase current health by the health to regenerate
             currentHealth = Mathf.Min(currentHealth + healthToRegen, maxHealth);
