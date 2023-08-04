@@ -7,7 +7,6 @@ public class Health : MonoBehaviour
     public static event HealthChangeEvent OnHealthChange; // Event triggered when health changes
 
     [SerializeField]
-    [Tooltip("The maximum health value for the object.")]
     private float maxHealth = 100;
 
     [SerializeField]
